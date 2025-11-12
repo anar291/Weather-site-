@@ -1,6 +1,6 @@
 // main.js
 // ClimaGlobe 3D — JS logic
-const OPENWEATHER_KEY = 'a82424d31564c9ea7831d731e51de5eb';
+const OPENWEATHER_KEY = '';
 
 // DOM refs
 const globeContainer = document.getElementById('three-container');
