@@ -1,90 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title>ClimaGlobe 3D </title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClimaGlobe 3D - Interactive Weather Dashboard</title>
+  <meta name="description" content="Explore global weather data and news on an interactive 3D globe" />
 
- <link rel="preconnect" href="https://fonts.googleapis.com" />
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
- <link rel="stylesheet" href="style.css" />
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
- <script src="//unpkg.com/globe.gl"></script>
+  <!-- Three.js & Globe.gl -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="//unpkg.com/globe.gl"></script>
 </head>
+
 <body>
- <header class="site-header">
-   <nav class="navbar" aria-label="Main Navigation">
-     <a href="#hero" class="logo">ClimaGlobe 3D 🌎</a>
+  <!-- Header -->
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="#" class="logo">
+        <span class="logo-icon">🌎</span>
+        <span class="logo-text">ClimaGlobe 3D</span>
+      </a>
 
-     <div class="nav-search">
-       <label for="city-input" class="visually-hidden">Search city</label>
-       <input id="city-input" type="text" placeholder="Search city..." autocomplete="off" />
-       <button id="search-button" aria-label="Search city">
-         <i class="fa-solid fa-magnifying-glass"></i>
-       </button>
-     </div>
+      <!-- Desktop Navigation -->
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">Weather API</a></li>
+        <li><a href="https://gnews.io/" target="_blank" rel="noopener noreferrer">News API</a></li>
+      </ul>
 
-   <div class="btn-group">
-     <button class="burger"
-         type="button"
-         data-bs-toggle="dropdown"
-         ...>
-       <span class="line1"></span>
-       <span class="line2"></span>
-       <span class="line3"></span>
-     </button>
-     <ul class="nav-links" role="navigation">
-       <li><a href="#">Home</a></li>
-       <li><a href="#">About</a></li>
-       <li><a href="#">Contact</a></li>
-       <li><a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">Api Source</a></li>
-     </ul>
-   </div>
-   </nav>
- </header>
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <div class="theme-toggle-track">
+            <i class="fas fa-moon theme-icon"></i>
+            <i class="fas fa-sun theme-icon"></i>
+            <div class="theme-toggle-thumb"></div>
+          </div>
+        </button>
 
- <main>
-   <!-- 3D Globe Background -->
-   <div id="three-container" aria-hidden="true"></div>
+        <!-- Mobile Menu Button -->
+        <button class="burger" id="burger-menu" aria-label="Toggle menu" aria-expanded="false">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
 
-   <!-- Weather Info Panel -->
-   <section id="weather-panel" role="region" aria-live="polite">
-     <h2 id="location-name">Search a city</h2>
-     <div id="weather-details">
-       <p>Temperature: <strong id="temp-data">-- °C</strong></p>
-       <p>Condition: <strong id="condition-data">--</strong></p>
-       <p>Humidity: <strong id="humidity-data">-- %</strong></p>
-       <p>Wind: <strong id="wind-data">-- m/s</strong></p>
-     </div>
-   </section>
- </main>
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <!-- Search Bar -->
+        <div class="search-container">
+          <input 
+            type="text" 
+            id="city-input" 
+            class="search-input" 
+            placeholder="Search city... (Press / to focus)"
+            autocomplete="off"
+          />
+          <button id="search-button" class="search-button" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
 
- <footer class="site-footer">
-   <div class="footer-content">
-     <div class="footer-info">
-       <p>&copy; 2025 Arnab. All rights reserved.</p>
-       <p class="attribution">
-         Weather data powered by
-         <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">
-           OpenWeatherMap
-         </a>.
-       </p>
-     </div>
+        <!-- Weather Panel -->
+        <section class="panel weather-panel" id="weather-panel">
+          <div class="panel-header">
+            <i class="fas fa-map-marker-alt panel-icon"></i>
+            <h2 id="location-name">Search a city to explore</h2>
+          </div>
 
-     <nav class="footer-nav" aria-label="Social media links">
-       <ul class="footer-links">
-         <li><a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></li>
-         <li><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a></li>
-         <li><a href="#" aria-label="Portfolio"><i class="fa-solid fa-user-circle"></i></a></li>
-       </ul>
-     </nav>
-   </div>
- </footer>
+          <!-- Main Temperature Display -->
+          <div class="temperature-display">
+            <div class="temperature-value" id="temp-display">--°</div>
+            <div class="temperature-condition" id="condition-display">--</div>
+            <div class="temperature-feels" id="feels-like-display"></div>
+          </div>
 
- <script src="main.js"></script>
+          <!-- Weather Details Grid -->
+          <div class="weather-grid" id="weather-grid">
+            <div class="weather-card">
+              <div class="weather-card-header">
+                <i class="fas fa-droplet" style="color: #60a5fa;"></i>
+                <span>Humidity</span>
+              </div>
+              <div class="weather-card-value" id="humidity-data">--%</div>
+            </div>
+
+            <div class="weather-card">
+              <div class="weather-card-header">
+                <i class="fas fa-wind" style="color: #22d3ee;"></i>
+                <span>Wind</span>
+              </div>
+              <div class="weather-card-value" id="wind-data">-- m/s</div>
+            </div>
+
+            <div class="weather-card">
+              <div class="weather-card-header">
+                <i class="fas fa-gauge-high" style="color: #a78bfa;"></i>
+                <span>Pressure</span>
+              </div>
+              <div class="weather-card-value" id="pressure-data">-- hPa</div>
+            </div>
+
+            <div class="weather-card">
+              <div class="weather-card-header">
+                <i class="fas fa-eye" style="color: #4ade80;"></i>
+                <span>Visibility</span>
+              </div>
+              <div class="weather-card-value" id="visibility-data">-- km</div>
+            </div>
+
+            <div class="weather-card">
+              <div class="weather-card-header">
+                <i class="fas fa-sunrise" style="color: #fb923c;"></i>
+                <span>Sunrise</span>
+              </div>
+              <div class="weather-card-value" id="sunrise-data">--:--</div>
+            </div>
+
+            <div class="weather-card">
+              <div class="weather-card-header">
+                <i class="fas fa-sunset" style="color: #f87171;"></i>
+                <span>Sunset</span>
+              </div>
+              <div class="weather-card-value" id="sunset-data">--:--</div>
+            </div>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div class="panel-spinner" id="weather-spinner"></div>
+        </section>
+
+        <!-- News Panel -->
+        <section class="panel news-panel" id="news-panel">
+          <div class="panel-header">
+            <i class="fas fa-newspaper panel-icon"></i>
+            <h2>Weather News</h2>
+          </div>
+
+          <div class="news-container" id="news-container">
+            <div class="news-loading">Loading news...</div>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div class="panel-spinner" id="news-spinner"></div>
+        </section>
+      </div>
+    </aside>
+
+    <!-- Globe Container -->
+    <div class="globe-wrapper">
+      <div id="globe-container"></div>
+      
+      <!-- Globe Instructions -->
+      <div class="globe-instructions">
+        <i class="fas fa-info-circle"></i>
+        <span><strong>Tip:</strong> Drag to rotate • Scroll to zoom • Click a location</span>
+      </div>
+
+      <!-- Globe Loading -->
+      <div class="globe-loading" id="globe-loading">
+        <div class="globe-loading-spinner"></div>
+        <p>Loading globe...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-info">
+        <p>&copy; 2025 Arnab. All rights reserved.</p>
+        <p class="footer-attribution">
+          Powered by
+          <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a>
+          &
+          <a href="https://gnews.io/" target="_blank" rel="noopener noreferrer">GNews</a>
+        </p>
+      </div>
+
+      <div class="footer-social">
+        <a href="#" aria-label="GitHub" title="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="#" aria-label="LinkedIn" title="LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="#" aria-label="Portfolio" title="Portfolio">
+          <i class="fas fa-user-circle"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Notification Container -->
+  <div id="notification-container"></div>
+
+  <!-- Main Script -->
+  <script src="main.js"></script>
 </body>
 </html>
