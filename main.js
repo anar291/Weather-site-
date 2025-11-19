@@ -1,7 +1,7 @@
 // ==================== API KEYS ====================
 // Use your simple, free API key here.
-const OPENWEATHER_KEY = 'a82424d31564c9ea7831d731e51de5eb';
-
+const OPENWEATHER_KEY = '';
+const GNEWS_KEY = '';
 
 // ==================== DOM ELEMENTS ====================
 // Theme Toggle
