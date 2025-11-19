@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ClimaGlobe 3D - Interactive Weather Dashboard</title>
-  <meta name="description" content="Explore global weather data and news on an interactive 3D globe" />
+  <meta name="description" content="Explore live global weather, AQI, and news on a stunning, interactive 3D globe." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,18 +30,38 @@
         <li><a href="#">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
-        <li><a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">Weather API</a></li>
-        <li><a href="https://gnews.io/" target="_blank" rel="noopener noreferrer">News API</a></li>
+        
+        <!-- === NEW: FAVORITES LIST (for mobile) === -->
+        <li class="favorites-nav-section">
+          <h4>Favorites</h4>
+          <ul id="favorites-list">
+            <!-- Favorites will be added here by JS -->
+          </ul>
+        </li>
+        <!-- === END OF NEW SECTION === -->
       </ul>
 
       <div class="header-actions">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-          <div class="theme-toggle-track">
-            <i class="fas fa-moon theme-icon"></i>
-            <i class="fas fa-sun theme-icon"></i>
-            <div class="theme-toggle-thumb"></div>
-          </div>
-        </button>
+        <!-- I've grouped the toggles for better mobile layout -->
+        <div class="toggles-group">
+          <!-- === NEW: UNITS TOGGLE === -->
+          <button class="units-toggle" id="units-toggle" aria-label="Toggle Celsius/Fahrenheit">
+            <div class="units-toggle-track">
+              <span class="unit-toggle-label">°C</span>
+              <span class="unit-toggle-label">°F</span>
+              <div class="units-toggle-thumb"></div>
+            </div>
+          </button>
+          <!-- === END OF NEW TOGGLE === -->
+          
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <div class="theme-toggle-track">
+              <i class="fas fa-moon theme-icon"></i>
+              <i class="fas fa-sun theme-icon"></i>
+              <div class="theme-toggle-thumb"></div>
+            </div>
+          </button>
+        </div>
 
         <button class="burger" id="burger-menu" aria-label="Toggle menu" aria-expanded="false">
           <span class="burger-line"></span>
@@ -63,6 +83,9 @@
             placeholder="Search city... (Press / to focus)"
             autocomplete="off"
           />
+          <button id="locate-button" class="locate-button" aria-label="Find my location">
+            <i class="fas fa-crosshairs"></i>
+          </button>
           <button id="search-button" class="search-button" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
@@ -81,9 +104,23 @@
             <div class="tab-panel active" id="tab-now">
               <section class="panel weather-panel" id="weather-panel">
                 <div class="panel-header">
-                  <i class="fas fa-map-marker-alt panel-icon"></i>
-                  <h2 id="location-name">Search a city</h2>
+                  <div class="panel-header-content">
+                    <i class="fas fa-map-marker-alt panel-icon"></i>
+                    <h2 id="location-name">Search a city</h2>
+                  </div>
+                  <!-- === NEW: FAVORITE BUTTON === -->
+                  <button class="favorite-button" id="favorite-button" aria-label="Add to favorites" aria-pressed="false">
+                    <i class="far fa-heart"></i> <!-- Empty heart -->
+                    <i class="fas fa-heart"></i> <!-- Solid heart -->
+                  </button>
+                  <!-- === END OF NEW BUTTON === -->
                 </div>
+                
+                <!-- === NEW: LOCAL TIME DISPLAY === -->
+                <div class="local-time" id="local-time-display">
+                  <!-- Local time will be added here by JS -->
+                </div>
+                <!-- === END OF NEW DISPLAY === -->
 
                 <div class="temperature-display">
                   <div class="temperature-value" id="temp-display">--°</div>
@@ -152,7 +189,7 @@
                 </div>
                 <div class="aqi-content">
                   <div class="aqi-value" id="aqi-value">--</div>
-                  <div classs="aqi-text">
+                  <div class="aqi-text">
                     <div class="aqi-category" id="aqi-category">--</div>
                     <div class="aqi-description">Pollutant: <span id="aqi-pollutant">--</span></div>
                   </div>
